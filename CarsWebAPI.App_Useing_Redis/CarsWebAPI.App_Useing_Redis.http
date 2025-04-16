@@ -1,0 +1,6 @@
+@CarsWebAPI.App_Useing_Redis_HostAddress = http://localhost:5055
+
+GET {{CarsWebAPI.App_Useing_Redis_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
