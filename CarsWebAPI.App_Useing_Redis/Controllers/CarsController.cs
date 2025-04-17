@@ -1,4 +1,5 @@
-﻿using CarsWebAPI.App_Useing_Redis.CarService;
+﻿using CarsWebAPI.App_Useing_Redis.Caching;
+using CarsWebAPI.App_Useing_Redis.CarService;
 using CarsWebAPI.App_Useing_Redis.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,14 +7,24 @@ using Microsoft.AspNetCore.Mvc;
 namespace CarsWebAPI.App_Useing_Redis.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class CarsController(ICarService carService) : ControllerBase
+public class CarsController(ICarService carService,IRedisCacheService cache) : ControllerBase
 {
     private readonly ICarService _carService = carService;
+    private readonly IRedisCacheService _cache = cache;
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        return Ok(await _carService.GetAll());
+        var cars = _cache?.GetData<IEnumerable<Car>>("Cars");
+
+        if (cars is not null)
+            return Ok(cars);
+
+        cars = await _carService.GetAll();
+
+        _cache?.SetData("Cars", cars);
+
+        return Ok(cars);
     }
 
     [HttpGet("{id}")]
