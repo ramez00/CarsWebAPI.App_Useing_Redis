@@ -5,7 +5,7 @@ This is a lightweight Web API project built using **.NET 8**, showcasing how to 
 ## 📦 Features
 
 - ✅ ASP.NET Core Web API (.NET 8)
-- ⚡ In-memory + Redis distributed caching
+- ⚡ Distributed caching => Redis
 - 🧪 Swagger UI for API testing
 ---
 
